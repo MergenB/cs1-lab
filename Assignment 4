@@ -1,0 +1,88 @@
+exercise 1
+
+def checkFileExists(filename):
+    """Function Accepts a file name and returns true if file exists"""
+    try:
+        # try to open the file
+        f = open(filename)
+        # return true
+        f.close()
+        return True
+    except IOError:
+        # else return false
+        return False
+
+def getFileContent(filename):
+    """Function that returns a list of lines in a txt file"""
+    # Open the file
+    data = open(filename)
+    # return the lines
+    return data.readlines()
+
+def findLongestWord(lines):
+    # initialise defaults
+    maxLength = 0
+    longest_word = None
+    line_number = -1
+    # iterate through each line and find the longest string
+    for lineNumber, line in enumerate(lines, start = 1):
+        length,lw = max([(len(x),x) for x in line.split()])
+        if length > maxLength:
+            maxLength = length
+            longest_word = lw
+            line_number = lineNumber
+    # return its length, the string and line number
+    return maxLength, longest_word, line_number
+
+def findLines(lines, string):
+    """A function that finds lines which contains the given strings"""
+    found = []
+    # for every line
+    for line in lines:
+        # if it contains string
+        if string in line:
+            # save it to found
+            found.append(line)
+    # return found
+    return found
+      
+
+def writeToFile(filename, content):
+    # open the file
+    f = open(filename, 'w')
+    # write the content
+    f.write(content)
+    # close the file
+    f.close()
+
+def main():
+    # initialise defaults
+    filename = None
+    # keep prompting for filename if file doesn't exists
+    while(True):
+        # prompt for file name
+        filename = input("Enter File Name: ")
+        # check if it exits
+        if not checkFileExists(filename):
+            print(f'Cannot find {filename}. Try Again!!')
+        else:
+            break
+    # get the lines of the file
+    contents = getFileContent(filename)
+    # get length, longest word and line number
+    maxLength, longest_word, line_number = findLongestWord(contents)
+    # print to console
+    print(f'Length : {maxLength}\nWord : {longest_word}\nLine Number : {line_number}\n\n')
+    # write to file
+    writeToFile('output1.txt', f'{maxLength}, {longest_word}, {line_number}')
+    # get the lines where the word appears
+    lines = findLines(contents, longest_word)
+    # write to file
+    writeToFile('output2.txt', ''.join(lines))
+    # print the lines
+    for line in lines:
+        print(line)
+
+if __name__ == "__main__":
+    main()
+  
